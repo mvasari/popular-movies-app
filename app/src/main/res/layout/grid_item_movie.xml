@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="200dp"
+    android:layout_height="fill_parent"
     android:minHeight="?android:attr/listPreferredItemHeight"
+    android:adjustViewBounds="true"
+    android:scaleType="centerCrop"
     android:gravity="center_vertical"
-    android:id="@+id/grid_item_movie_gridview">
+    android:id="@+id/grid_item_movie_gridview"
+    >
+
 </ImageView>

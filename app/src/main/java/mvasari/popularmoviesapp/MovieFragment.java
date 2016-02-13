@@ -36,11 +36,8 @@ import java.util.List;
 public class MovieFragment extends Fragment {
 
     ImageListAdapter mMoviesAdapter;
-    String[] moviePosters  = {
-            "http://i.imgur.com/rFLNqWI.jpg",
-            "http://i.imgur.com/C9pBVt7.jpg"
-    };
-
+    String[] moviePosters;
+    
     public MovieFragment() {
     }
 
@@ -58,15 +55,12 @@ public class MovieFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         FetchMovieClass movieTask = new FetchMovieClass();
-        movieTask.execute();
+//     movieTask.execute();
+//       ArrayList<String> lst = new ArrayList<String>(Arrays.asList(moviePosters));
 
-//        ArrayList<String> lst = new ArrayList<String>(Arrays.asList(moviePosters));
-
-        mMoviesAdapter = new ImageListAdapter(rootView.getContext(), new ArrayList<String>(Arrays.asList(moviePosters)));
+        mMoviesAdapter = new ImageListAdapter(rootView.getContext(), new ArrayList<String>());
         GridView gridView = (GridView) rootView.findViewById(R.id.gridview_movies);
         gridView.setAdapter(mMoviesAdapter);
-
-//        Picasso.with(rootView.getContext()).load("http://i.imgur.com/DvpvklR.png").into(imageView);
 
         return rootView;
     }
@@ -75,7 +69,7 @@ public class MovieFragment extends Fragment {
     private void updateMovies()
     {
         FetchMovieClass movieTask = new FetchMovieClass();
-        movieTask.execute();
+        movieTask.execute("");
     }
 
     public class ImageListAdapter extends ArrayAdapter {
@@ -102,7 +96,8 @@ public class MovieFragment extends Fragment {
             Picasso
                     .with(context)
                     .load(imageUrls.get(position))
-                    .fit() // will explain later
+                    //.fit()
+                    .resize(185, 185).centerInside()// will explain later
                     .into((ImageView) convertView);
 
             return convertView;
@@ -125,9 +120,7 @@ public class MovieFragment extends Fragment {
 
         @Override
         protected String[] doInBackground(String... params) {
-            if (params.length != 0 ) {
-                return null;
-            }
+
 
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
@@ -158,7 +151,7 @@ public class MovieFragment extends Fragment {
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
-
+Log.e("TESTE","before connection");
                 // Read the input stream into a String
                 InputStream inputStream = urlConnection.getInputStream();
                 StringBuffer buffer = new StringBuffer();
@@ -180,7 +173,7 @@ public class MovieFragment extends Fragment {
                     return null;
                 }
                 moviesJsonStr = buffer.toString();
-
+                Log.e("TESTE","leu json");
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Error ", e);
                 // If the code didn't successfully get the data, there's no point in attemping to parse it.
